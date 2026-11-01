@@ -25,7 +25,7 @@ MindSpider 运行示例
 - **编程语言**: Python 3.9+
 - **AI框架**: 默认Deepseek，可以接入多种api (话题提取与分析)
 - **爬虫框架**: Playwright (浏览器自动化)
-- **数据库**: MySQL (数据持久化存储)
+- **数据库**: MySQL / PostgreSQL (数据持久化存储)
 - **并发处理**: AsyncIO (异步并发爬取)
 
 ## 项目结构
@@ -186,8 +186,8 @@ flowchart TB
    - 记录任务状态、进度、结果等
 
 5. **平台内容表**（继承自MediaCrawler）
-   - xhs_note - 小红书笔记（暂时废弃，详情查看：https://github.com/NanmiCoder/MediaCrawler/issues/754）
-   - douyin_aweme - 抖音视频
+    - xhs_note - 小红书笔记
+    - douyin_aweme - 抖音视频
    - kuaishou_video - 快手视频
    - bilibili_video - B站视频
    - weibo_note - 微博帖子
@@ -204,12 +204,26 @@ flowchart TB
 - 操作系统：Windows/Linux/macOS
 
 
-### 1. 克隆项目
+### 1. 克隆项目与获取子模块
+
+MindSpider 作为 BettaFish 的核心组件运行。请克隆 BettaFish 主项目并同步获取 `MediaCrawler` 爬虫子模块。
+
+**方式一：克隆时直接获取（推荐）**
 
 ```bash
-git clone https://github.com/yourusername/MindSpider.git
-cd MindSpider
+git clone --recurse-submodules https://github.com/666ghj/BettaFish.git
+cd BettaFish/MindSpider
 ```
+
+**方式二：已克隆主项目后补充拉取**
+
+如果你已经克隆了 BettaFish 但 `MindSpider/DeepSentimentCrawling/MediaCrawler` 目录为空，请在**项目根目录**运行：
+
+```bash
+git submodule update --init --recursive
+```
+
+> **注意**：MediaCrawler 的 Python 依赖会在首次运行 `uv run main.py --deep-sentiment` 时由系统自动检测并安装到当前环境。
 
 ### 2. 创建并激活环境
 
@@ -261,13 +275,18 @@ playwright install
 复制.env.example文件为.env文件，放置在项目根目录。编辑 `.env` 文件，设置数据库和API配置：
 
 ```python
-# MySQL数据库配置
+# 数据库配置（MySQL 示例）
+DB_DIALECT = "mysql"       # mysql 或 postgresql
 DB_HOST = "your_database_host"
 DB_PORT = 3306
 DB_USER = "your_username"
 DB_PASSWORD = "your_password"
 DB_NAME = "mindspider"
-DB_CHARSET = "utf8mb4"
+DB_CHARSET = "utf8mb4"     # PostgreSQL 时可省略此项
+
+# PostgreSQL 示例（将上方 DB_DIALECT 改为 postgresql，DB_PORT 改为 5432）
+# DB_DIALECT = "postgresql"
+# DB_PORT = 5432
 
 # MINDSPIDER API密钥
 MINDSPIDER_BASE_URL=your_api_base_url
@@ -280,6 +299,8 @@ MINDSPIDER_MODEL_NAME=deepseek-chat
 ```bash
 # 检查系统状态
 python main.py --status
+# 或
+uv run main.py --status
 ```
 
 ## 使用指南
@@ -289,12 +310,18 @@ python main.py --status
 ```bash
 # 1. 运行话题提取（获取热点新闻和关键词）
 python main.py --broad-topic
+# 或
+uv run main.py --broad-topic
 
 # 2. 运行爬虫（基于关键词爬取各平台内容）
 python main.py --deep-sentiment --test
+# 或
+uv run main.py --deep-sentiment --test
 
 # 或者一次性运行完整流程
 python main.py --complete --test
+# 或
+uv run main.py --complete --test
 ```
 
 ### 单独使用模块
@@ -302,12 +329,18 @@ python main.py --complete --test
 ```bash
 # 只获取今日热点和关键词
 python main.py --broad-topic
+# 或
+uv run main.py --broad-topic
 
 # 只爬取特定平台
 python main.py --deep-sentiment --platforms xhs dy --test
+# 或
+uv run main.py --deep-sentiment --platforms xhs dy --test
 
 # 指定日期
 python main.py --broad-topic --date 2024-01-15
+# 或
+uv run main.py --broad-topic --date 2024-01-15
 ```
 
 ## 爬虫配置（重要）
@@ -316,10 +349,12 @@ python main.py --broad-topic --date 2024-01-15
 
 **首次使用每个平台都需要登录，这是最关键的步骤：**
 
-1. **小红书登录**（暂时废弃，详情查看：https://github.com/NanmiCoder/MediaCrawler/issues/754）
+1. **小红书登录**
 ```bash
 # 测试小红书爬取（会弹出二维码）
 python main.py --deep-sentiment --platforms xhs --test
+# 或
+uv run main.py --deep-sentiment --platforms xhs --test
 # 用小红书APP扫码登录，登录成功后会自动保存状态
 ```
 
@@ -327,25 +362,27 @@ python main.py --deep-sentiment --platforms xhs --test
 ```bash
 # 测试抖音爬取
 python main.py --deep-sentiment --platforms dy --test
+# 或
+uv run main.py --deep-sentiment --platforms dy --test
 # 用抖音APP扫码登录
 ```
 
 3. **其他平台同理**
 ```bash
 # 快手
-python main.py --deep-sentiment --platforms ks --test
+uv run main.py --deep-sentiment --platforms ks --test
 
 # B站
-python main.py --deep-sentiment --platforms bili --test
+uv run main.py --deep-sentiment --platforms bili --test
 
 # 微博
-python main.py --deep-sentiment --platforms wb --test
+uv run main.py --deep-sentiment --platforms wb --test
 
 # 贴吧
-python main.py --deep-sentiment --platforms tieba --test
+uv run main.py --deep-sentiment --platforms tieba --test
 
 # 知乎
-python main.py --deep-sentiment --platforms zhihu --test
+uv run main.py --deep-sentiment --platforms zhihu --test
 ```
 
 ### 登录问题排除
@@ -371,9 +408,13 @@ https://github.com/666ghj/BettaFish/issues/185
 ```bash
 # 小规模测试（推荐先这样测试）
 python main.py --complete --test
+# 或
+uv run main.py --complete --test
 
 # 调整爬取数量
 python main.py --complete --max-keywords 20 --max-notes 30
+# 或
+uv run main.py --complete --max-keywords 20 --max-notes 30
 ```
 
 ### 高级功能
@@ -382,18 +423,26 @@ python main.py --complete --max-keywords 20 --max-notes 30
 ```bash
 # 提取指定日期的话题
 python main.py --broad-topic --date 2024-01-15
+# 或
+uv run main.py --broad-topic --date 2024-01-15
 
 # 爬取指定日期的内容
 python main.py --deep-sentiment --date 2024-01-15
+# 或
+uv run main.py --deep-sentiment --date 2024-01-15
 ```
 
 #### 2. 指定平台爬取
 ```bash
 # 只爬取B站和抖音
 python main.py --deep-sentiment --platforms bili dy --test
+# 或
+uv run main.py --deep-sentiment --platforms bili dy --test
 
 # 爬取所有平台的特定数量内容
 python main.py --deep-sentiment --max-keywords 30 --max-notes 20
+# 或
+uv run main.py --deep-sentiment --max-keywords 30 --max-notes 20
 ```
 
 ## 常用参数
@@ -429,12 +478,16 @@ HEADLESS = False
 
 # 重新运行登录
 python main.py --deep-sentiment --platforms xhs --test
+# 或
+uv run main.py --deep-sentiment --platforms xhs --test
 ```
 
 ### 2. 数据库连接失败
 ```bash
 # 检查配置
 python main.py --status
+# 或
+uv run main.py --status
 
 # 检查config.py中的数据库配置是否正确
 ```

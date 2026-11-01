@@ -4,11 +4,9 @@
 
 <a href="https://trendshift.io/repositories/15286" target="_blank"><img src="https://trendshift.io/api/badge/repositories/15286" alt="666ghj%2FBettaFish | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
 
-<a href="https://aihubmix.com/?aff=8Ds9" target="_blank"><img src="./static/image/logo_aihubmix.png" alt="666ghj%2FBettaFish | Trendshift" height="40"/></a>&ensp;
-<a href="https://lioncc.ai/" target="_blank"><img src="./static/image/logo_loincc.png" alt="666ghj%2FBettaFish | Trendshift" height="40"/></a>&ensp;
-<a href="https://share.302.ai/P66Qe3" target="_blank"><img src="./static/image/logo_302ai.png" alt="666ghj%2FBettaFish | Trendshift" height="40"/></a>
-
-<a href="https://open.anspire.cn/?share_code=3E1FUOUH" target="_blank"><img src="./static/image/logo_anspire.png" alt="666ghj%2FBettaFish | Trendshift" height="50"/></a>
+<a href="https://inferera.com/?aff=8Ds9" target="_blank"><img src="./static/image/logo_aihubmix.png" alt="666ghj%2FBettaFish | Trendshift" height="40"/></a>&ensp;
+<a href="https://open.anspire.cn/?share_code=3E1FUOUH" target="_blank"><img src="./static/image/logo_anspire.png" alt="666ghj%2FBettaFish | Trendshift" height="40"/></a>&ensp;
+<a href="https://go.apimart.ai/gh-xxbettafish" target="_blank"><img src="./static/image/logo_apimart.png" alt="APIMart Logo" height="40"/></a>
 
 [![GitHub Stars](https://img.shields.io/github/stars/666ghj/BettaFish?style=flat-square)](https://github.com/666ghj/BettaFish/stargazers)
 [![GitHub Watchers](https://img.shields.io/github/watchers/666ghj/BettaFish?style=flat-square)](https://github.com/666ghj/BettaFish/watchers)
@@ -52,11 +50,11 @@
 
 **始于舆情，而不止于舆情**。“微舆”的目标，是成为驱动一切业务场景的简洁通用的数据分析引擎。
 
-> 举个例子. 你只需简单修改Agent工具集的api参数与prompt，就可以把他变成一个金融领域的市场分析系统
+> 举个例子. 你只需简单修改Agent工具集的api参数与prompt，就可以把它变成一个金融领域的市场分析系统
 >
 > 附一个比较活跃的L站项目讨论帖：https://linux.do/t/topic/1009280
 >
-> 查看L站佬友做的测评 [开源项目(微舆)与manus|minimax|ChatGPT对比](https://linux.do/t/topic/1148040)
+> 查看L站佬友做的测评 [开源项目(微舆)与manus|minimax|ChatGPT|Perplexity对比](https://linux.do/t/topic/1148040)
 
 <div align="center">
 <img src="static/image/system_schematic.png" alt="banner" width="800">
@@ -66,26 +64,16 @@
 
 ## 🪄 赞助商
 
-LLM模型API赞助：<a href="https://aihubmix.com/?aff=8Ds9" target="_blank"><img src="./static/image/logo_aihubmix.png" alt="666ghj%2FBettaFish | Trendshift" height="40"/></a>
-
-<details>
-<summary>有赞助LLM算力福利！编程拼车codecodex.ai；编程算力VibeCodingAPI.ai：</a><span style="margin-left: 10px"><a href="https://codecodex.ai/" target="_blank"><img src="./static/image/logo_loincc.png" alt="666ghj%2FBettaFish | Trendshift" height="40"/></a></summary>
-
-1. 所罗门博客LionCC.ai已更新《BettaFish 微舆系统 - LionCC API 部署配置完全指南》正在二开优化一键部署和云服务器调用方案。
-2. VibeCodingapi.ai狮子算力平台已经适配《BettaFish 微舆系统》所有LLM模型含claude code和openai codex和gemini cli编程开发三巨头算力。额度价格，只要一比一（100元等于100美刀额度）
-3. Codecodex.ai狮子编程拼车系统，已实现无IP门槛绕过claude code和openai codex封锁，按官方部署教程后切换BASE_URL调用地址和Token key调用密钥即可使用最强编程模型。
-
-所罗门LionCC赞助BettaFish 微舆福利：打开codecodex.ai狮子编程频道扫码加入微信社群，注册VibeCodingapi.ai狮子算力，统一送20刀API额度（仅限前一千名）
-</details>
-
-<details>
-<summary>按用量付费的企业级AI资源平台，提供市场上全面的AI模型和API，以及多种在线AI应用：</a><span style="margin-left: 10px"><a href="https://share.302.ai/P66Qe3" target="_blank"><img src="./static/image/logo_302ai.png" alt="666ghj%2FBettaFish | Trendshift" height="40"/></a></summary>
-<img src="static/image/banner_302ai_ch.jpg" alt="banner">302.AI是一个按用量付费的企业级AI资源平台，提供市场上最新、最全面的AI模型和API，以及多种开箱即用的在线AI应用。
-</details>
+LLM模型API赞助：<a href="https://inferera.com/?aff=8Ds9" target="_blank"><img src="./static/image/logo_aihubmix.png" alt="666ghj%2FBettaFish | Trendshift" height="40"/></a>
 
 <details>
 <summary>AI联网搜索、文件解析及网页内容抓取等智能体核心能力提供商：</a><span style="margin-left: 10px"><a href="https://open.anspire.cn/?share_code=3E1FUOUH" target="_blank"><img src="./static/image/logo_anspire.png" alt="666ghj%2FBettaFish | Trendshift" height="50"/></a></summary>
 安思派开放平台(Anspire Open)是面向智能体时代的领先的基础设施提供商。我们为开发者提供构建强大智能体所需的核心能力栈，现已上线AI联网搜索【多版本，极具竞争力的价格】、文件解析【限免】及网页内容抓取【限免】、云端浏览器自动化（Anspire Browser Agent）【内测】、多轮改写等服务，持续为智能体连接并操作复杂的数字世界提供坚实基础。可无缝集成至Dify、Coze、元器等主流智能体平台。通过透明点数计费体系与模块化设计，为企业提供高效、低成本的定制化支持，加速智能化升级进程。
+</details>
+
+<details>
+<summary>专注 AI 图片/视频生成的低价 API 平台，GPT-Image-2 低至 $0.006/张：&ensp;<a href="https://go.apimart.ai/gh-xxbettafish" target="_blank"><img src="./static/image/logo_apimart.png" alt="APIMart Logo" height="50"/></a></summary>
+感谢 APIMart 赞助了本项目！APIMart 是专注 AI 图片/视频生成的低价 API 平台，GPT-Image-2 低至 $0.006/张，1 美元可出图 160+ 张。图片、视频一套异步 API 通吃，提交任务拿 ID、回调取结果，跑批万张不超时、换模型不改代码。按量付费、无月费，通过<a href="https://go.apimart.ai/gh-xxbettafish" target="_blank">此注册链接</a>注册即可开用。
 </details>
 
 ## 🏗️ 系统架构
@@ -261,10 +249,11 @@ BettaFish/
 ├── templates/                              # Flask前端模板
 │   └── index.html                          # 主界面HTML
 ├── static/                                 # 静态资源
-│   └── image/                              # 图片资源
-│       ├── logo_compressed.png
-│       ├── framework.png
-│       └── ...
+│   ├── image/                              # 图片资源
+│   │   └── ...
+│   ├── Partial README for PDF Exporting/   # PDF导出依赖配置说明
+│   └── v2_report_example/                  # 报告渲染示例
+│       └── report_all_blocks_demo/         # 全块类型演示（HTML/PDF/MD）
 ├── logs/                                   # 运行日志目录
 ├── final_reports/                          # 最终生成的报告文件
 │   ├── ir/                                 # 报告IR JSON文件
@@ -284,6 +273,8 @@ BettaFish/
 ├── docker-compose.yml                      # Docker多服务编排配置
 ├── Dockerfile                              # Docker镜像构建文件
 ├── requirements.txt                        # Python依赖包清单
+├── regenerate_latest_html.py               # 使用最新章节重装订并渲染HTML
+├── regenerate_latest_md.py                 # 使用最新章节重装订并渲染Markdown
 ├── regenerate_latest_pdf.py                # PDF重新生成工具脚本
 ├── report_engine_only.py                   # Report Engine命令行版本
 ├── README.md                               # 中文说明文档
@@ -389,12 +380,12 @@ playwright install chromium
 
 编辑 `.env` 文件，填入您的API密钥（您也可以选择自己的模型、搜索代理，详情见根目录.env.example文件内或根目录config.py中的说明）：
 
-```yml
+```bash
 # ====================== 数据库配置 ======================
 # 数据库主机，例如localhost 或 127.0.0.1
 DB_HOST=your_db_host
-# 数据库端口号，默认为3306
-DB_PORT=3306
+# 数据库端口号，postgresql默认为5432，mysql默认为3306
+DB_PORT=5432
 # 数据库用户名
 DB_USER=your_db_user
 # 数据库密码
@@ -465,7 +456,7 @@ streamlit run SingleEngineApp/insight_engine_streamlit_app.py --server.port 8501
 这部分有详细的配置文档：[MindSpider使用说明](./MindSpider/README.md)
 
 <div align="center">
-<img src="MindSpider\img\example.png" alt="banner" width="600">
+<img src="MindSpider/img/example.png" alt="banner" width="600">
 
 MindSpider 运行示例
 </div>
@@ -492,7 +483,7 @@ python main.py --deep-sentiment --platforms xhs dy wb
 
 #### 6.4 命令行报告生成工具
 
-该工具会跳过三个分析引擎的运行阶段，直接读取它们的最新日志文件，并在无需 Web 界面的情况下生成综合报告（同时省略文件增量校验步骤）。通常用于对报告生成结果不满意、需要快速重试的场景，或在调试 Report Engine 时启用。
+该工具会跳过三个分析引擎的运行阶段，直接读取它们的最新日志文件，并在无需 Web 界面的情况下生成综合报告（同时省略文件增量校验步骤），默认会在 PDF 之后自动生成 Markdown（可用参数关闭）。通常用于对报告生成结果不满意、需要快速重试的场景，或在调试 Report Engine 时启用。
 
 ```bash
 # 基本使用（自动从文件名提取主题）
@@ -503,6 +494,9 @@ python report_engine_only.py --query "土木工程行业分析"
 
 # 跳过PDF生成（即使系统支持）
 python report_engine_only.py --skip-pdf
+
+# 跳过Markdown生成
+python report_engine_only.py --skip-markdown
 
 # 显示详细日志
 python report_engine_only.py --verbose
@@ -520,13 +514,19 @@ python report_engine_only.py --help
 5. **自动保存文件**：
    - HTML报告保存到 `final_reports/` 目录
    - PDF报告（如果有依赖）保存到 `final_reports/pdf/` 目录
-   - 文件命名格式：`final_report_{主题}_{时间戳}.html/pdf`
+   - Markdown报告（可用 `--skip-markdown` 关闭）保存到 `final_reports/md/` 目录
+   - 文件命名格式：`final_report_{主题}_{时间戳}.html/pdf/md`
 
 **注意事项：**
 
 - 确保三个引擎目录中至少有一个包含`.md`报告文件
 - 命令行工具与Web界面相互独立，不会相互影响
 - PDF生成需要安装系统依赖，详见上文"安装 PDF 导出所需系统依赖"部分
+
+**快速重渲染最新结果：**
+
+- `regenerate_latest_html.py` / `regenerate_latest_md.py`：从 `CHAPTER_OUTPUT_DIR` 中最新一次运行的章节 JSON 重装订 Document IR，并直接渲染 HTML 或 Markdown。
+- `regenerate_latest_pdf.py`：读取 `final_reports/ir` 里最新的 IR，使用 SVG 矢量图表重新导出 PDF。
 
 ## ⚙️ 高级配置（已过时，已经统一为项目根目录.env文件管理，其他子agent自动继承根目录配置）
 
@@ -569,14 +569,14 @@ SENTIMENT_CONFIG = {
 
 ### 接入不同的LLM模型
 
-支持任意openAI调用格式的LLM提供商，只需要在/config.py中填写对应的KEY、BASE_URL、MODEL_NAME即可。
+支持任意OpenAI调用格式的LLM提供商，只需要在/config.py中填写对应的KEY、BASE_URL、MODEL_NAME即可。
 
 > 什么是openAI调用格式？下面提供一个简单的例子：
 >```python
 >from openai import OpenAI
 >
 >client = OpenAI(api_key="your_api_key", 
->                base_url="https://aihubmix.com/v1")
+>                base_url="https://inferera.com/v1")
 >
 >response = client.chat.completions.create(
 >    model="gpt-4o-mini",
@@ -705,13 +705,12 @@ class DeepSearchAgent:
 
 ## 🦖 下一步开发计划
 
-现在系统只完成了"三板斧"中的前两步，即：输入要求->详细分析，还缺少一步预测，直接将他继续交给LLM是不具有说服力的。
+现在系统完成了最后一步预测！访问查看【MiroFish-预测万物】：https://github.com/666ghj/MiroFish
 
 <div align="center">
+<img src="static/image/MiroFish_logo_compressed.jpeg" alt="banner" width="800">
 <img src="static/image/banner_compressed.png" alt="banner" width="800">
 </div>
-
-目前我们经过很长一段时间的爬取收集，拥有了大量全网话题热度随时间、爆点等的变化趋势热度数据，已经具备了可以开发预测模型的条件。我们团队将运用时序模型、图神经网络、多模态融合等预测模型技术储备于此，实现真正基于数据驱动的舆情预测功能。
 
 ## ⚠️ 免责声明
 
@@ -753,7 +752,7 @@ class DeepSearchAgent:
 
 ### 获取帮助
 
-常见问题解答：https://github.com/666ghj/BettaFish/issues/185
+常见问题解答：https://github.com/666ghj/BettaFish/issues/700
 
 - **项目主页**：[GitHub仓库](https://github.com/666ghj/BettaFish)
 - **问题反馈**：[Issues页面](https://github.com/666ghj/BettaFish/issues)
@@ -761,7 +760,7 @@ class DeepSearchAgent:
 
 ### 联系方式
 
-- 📧 **邮箱**：hangjiang@bupt.edu.cn
+- 📧 **邮箱**：baifu.guohj@gmail.com
 
 ### 商务合作
 
@@ -785,11 +784,11 @@ class DeepSearchAgent:
 
 ## 📈 项目统计
 
-<a href="https://www.star-history.com/#666ghj/BettaFish&type=date&legend=top-left">
+<a href="https://github.com/666ghj/BettaFish">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=666ghj/BettaFish&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=666ghj/BettaFish&type=date&legend=top-left" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=666ghj/BettaFish&type=date&legend=top-left" />
+   <source media="(prefers-color-scheme: dark)" srcset="static/image/star-history-dark.svg" />
+   <source media="(prefers-color-scheme: light)" srcset="static/image/star-history-light.svg" />
+   <img alt="BettaFish Star History Chart" src="static/image/star-history-light.svg" />
  </picture>
 </a>
 

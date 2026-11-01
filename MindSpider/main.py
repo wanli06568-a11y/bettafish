@@ -8,6 +8,8 @@ MindSpider - AI爬虫项目主程序
 import os
 import sys
 import argparse
+import difflib
+import re
 from datetime import date, datetime
 from pathlib import Path
 import subprocess
@@ -73,7 +75,7 @@ class MindSpider:
         
         def build_async_url() -> str:
             dialect = (settings.DB_DIALECT or "mysql").lower()
-            if dialect == "postgresql":
+            if dialect in ("postgresql", "postgres"):
                 return f"postgresql+asyncpg://{settings.DB_USER}:{quote_plus(settings.DB_PASSWORD)}@{settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_NAME}"
             # 默认使用 mysql 异步驱动 asyncmy
             return (
@@ -104,7 +106,7 @@ class MindSpider:
         
         def build_async_url() -> str:
             dialect = (settings.DB_DIALECT or "mysql").lower()
-            if dialect == "postgresql":
+            if dialect in ("postgresql", "postgres"):
                 return f"postgresql+asyncpg://{settings.DB_USER}:{quote_plus(settings.DB_PASSWORD)}@{settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_NAME}"
             return (
                 f"mysql+asyncmy://{settings.DB_USER}:{quote_plus(settings.DB_PASSWORD)}"
@@ -129,6 +131,10 @@ class MindSpider:
             missing_tables = [t for t in required_tables if t not in existing_tables]
             if missing_tables:
                 logger.error(f"缺少数据库表: {', '.join(missing_tables)}")
+                logger.info(
+                    "提示: 请在 MindSpider 目录运行 'python main.py --init-db'，"
+                    "或在仓库根目录运行 'python MindSpider/main.py --init-db' 初始化数据库表"
+                )
                 return False
             logger.info("数据库表检查通过")
             return True
@@ -151,7 +157,8 @@ class MindSpider:
                 [sys.executable, str(init_script)],
                 cwd=self.schema_path,
                 capture_output=True,
-                text=True
+                text=True,
+                encoding='utf-8'
             )
             
             if result.returncode == 0:
@@ -165,6 +172,21 @@ class MindSpider:
             logger.exception(f"数据库初始化异常: {e}")
             return False
     
+    def _ensure_database_ready(self) -> bool:
+        """确保数据库表已就绪，如不存在则自动初始化"""
+        if not self.check_database_connection():
+            logger.error("数据库连接失败，无法继续")
+            return False
+        
+        if not self.check_database_tables():
+            logger.warning("数据库表不存在，自动初始化中...")
+            if not self.initialize_database():
+                logger.error("数据库自动初始化失败")
+                return False
+            logger.info("数据库表自动初始化成功")
+        
+        return True
+
     def check_dependencies(self) -> bool:
         """检查依赖环境"""
         logger.info("检查依赖环境...")
@@ -184,18 +206,73 @@ class MindSpider:
             logger.info("请运行: pip install -r requirements.txt")
             return False
         
-        # 检查MediaCrawler依赖
+        # 检查并安装MediaCrawler依赖
         mediacrawler_path = self.deep_sentiment_path / "MediaCrawler"
         if not mediacrawler_path.exists():
             logger.error("错误：找不到MediaCrawler目录")
             return False
         
+        # 自动安装MediaCrawler的依赖
+        self._install_mediacrawler_dependencies()
+        
         logger.info("依赖环境检查通过")
         return True
     
+    def _install_mediacrawler_dependencies(self) -> bool:
+        """自动安装MediaCrawler子模块的依赖"""
+        mediacrawler_req = self.deep_sentiment_path / "MediaCrawler" / "requirements.txt"
+        
+        if not mediacrawler_req.exists():
+            logger.warning(f"MediaCrawler requirements.txt 不存在: {mediacrawler_req}")
+            return False
+        
+        # 检查是否已安装过（使用标记文件）
+        marker_file = self.deep_sentiment_path / "MediaCrawler" / ".deps_installed"
+        req_mtime = mediacrawler_req.stat().st_mtime
+        
+        if marker_file.exists():
+            marker_mtime = marker_file.stat().st_mtime
+            if marker_mtime >= req_mtime:
+                logger.debug("MediaCrawler依赖已安装，跳过")
+                return True
+        
+        logger.info("正在安装MediaCrawler依赖...")
+        install_commands = [
+            [sys.executable, "-m", "pip", "install", "-r", str(mediacrawler_req), "-q"],
+            ["uv", "pip", "install", "-r", str(mediacrawler_req), "-q"],
+        ]
+        try:
+            for cmd in install_commands:
+                result = subprocess.run(
+                    cmd,
+                    capture_output=True,
+                    text=True,
+                    encoding='utf-8',
+                    timeout=300  # 5分钟超时
+                )
+                if result.returncode == 0:
+                    marker_file.touch()
+                    logger.info(f"MediaCrawler依赖安装成功 (via {cmd[0]})")
+                    return True
+                logger.debug(f"{cmd[0]} 安装失败，尝试下一种方式: {result.stderr.strip()}")
+
+            logger.error("MediaCrawler依赖安装失败：所有安装方式均不可用")
+            return False
+
+        except subprocess.TimeoutExpired:
+            logger.error("MediaCrawler依赖安装超时")
+            return False
+        except Exception as e:
+            logger.exception(f"MediaCrawler依赖安装异常: {e}")
+            return False
+
     def run_broad_topic_extraction(self, extract_date: date = None, keywords_count: int = 100) -> bool:
         """运行BroadTopicExtraction模块"""
         logger.info("运行BroadTopicExtraction模块...")
+        
+        # 自动检查并初始化数据库表
+        if not self._ensure_database_ready():
+            return False
         
         if not extract_date:
             extract_date = date.today()
@@ -233,6 +310,13 @@ class MindSpider:
                                    test_mode: bool = False) -> bool:
         """运行DeepSentimentCrawling模块"""
         logger.info("运行DeepSentimentCrawling模块...")
+
+        # 自动检查并初始化数据库表
+        if not self._ensure_database_ready():
+            return False
+
+        # 自动安装MediaCrawler依赖
+        self._install_mediacrawler_dependencies()
         
         if not target_date:
             target_date = date.today()
@@ -281,6 +365,10 @@ class MindSpider:
                              max_notes: int = 50, test_mode: bool = False) -> bool:
         """运行完整工作流程"""
         logger.info("开始完整的MindSpider工作流程")
+        
+        # 自动检查并初始化数据库表（确保独立调用时也能自动初始化）
+        if not self._ensure_database_ready():
+            return False
         
         if not target_date:
             target_date = date.today()
@@ -357,9 +445,42 @@ class MindSpider:
         logger.info("MindSpider项目初始化完成！")
         return True
 
+PLATFORM_CHOICES = ['xhs', 'dy', 'ks', 'bili', 'wb', 'tieba', 'zhihu']
+
+PLATFORM_ALIASES = {
+    'weibo': 'wb', 'webo': 'wb', '微博': 'wb',
+    'douyin': 'dy', '抖音': 'dy',
+    'kuaishou': 'ks', '快手': 'ks',
+    'bilibili': 'bili', 'b站': 'bili', 'bstation': 'bili',
+    'xiaohongshu': 'xhs', '小红书': 'xhs', 'redbook': 'xhs',
+    'zhihu': 'zhihu', '知乎': 'zhihu',
+    'tieba': 'tieba', '贴吧': 'tieba',
+}
+
+class SuggestiveArgumentParser(argparse.ArgumentParser):
+    """在参数错误时给出相似候选项提示"""
+
+    def error(self, message: str):
+        match = re.search(r"invalid choice: '([^']+)'", message)
+        if match:
+            bad = match.group(1)
+            alias = PLATFORM_ALIASES.get(bad.lower())
+            suggestions = difflib.get_close_matches(bad, PLATFORM_CHOICES, n=3, cutoff=0.3)
+            if alias:
+                print(f"错误: '{bad}' 不是合法的平台代码。您是否想输入 '{alias}'？", file=sys.stderr)
+            elif suggestions:
+                print(f"错误: '{bad}' 不是合法的平台代码。最接近的选项: {suggestions}", file=sys.stderr)
+            else:
+                print(f"错误: '{bad}' 不是合法的平台代码。合法平台: {PLATFORM_CHOICES}", file=sys.stderr)
+            print(f"完整错误: {message}", file=sys.stderr)
+        else:
+            print(f"错误: {message}", file=sys.stderr)
+        self.print_usage(sys.stderr)
+        sys.exit(2)
+
 def main():
     """命令行入口"""
-    parser = argparse.ArgumentParser(description="MindSpider - AI爬虫项目主程序")
+    parser = SuggestiveArgumentParser(description="MindSpider - AI爬虫项目主程序")
     
     # 基本操作
     parser.add_argument("--setup", action="store_true", help="初始化项目设置")
@@ -373,8 +494,8 @@ def main():
     
     # 参数配置
     parser.add_argument("--date", type=str, help="目标日期 (YYYY-MM-DD)，默认为今天")
-    parser.add_argument("--platforms", type=str, nargs='+', 
-                       choices=['xhs', 'dy', 'ks', 'bili', 'wb', 'tieba', 'zhihu'],
+    parser.add_argument("--platforms", type=str, nargs='+',
+                       choices=PLATFORM_CHOICES,
                        help="指定爬取平台")
     parser.add_argument("--keywords-count", type=int, default=100, help="话题提取的关键词数量")
     parser.add_argument("--max-keywords", type=int, default=50, help="每个平台最大关键词数量")

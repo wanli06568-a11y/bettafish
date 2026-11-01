@@ -31,6 +31,7 @@ from .nodes import (
     ChapterGenerationNode,
     ChapterJsonParseError,
     ChapterContentError,
+    ChapterValidationError,
     DocumentLayoutNode,
     WordBudgetNode,
 )
@@ -482,7 +483,8 @@ class ReportAgent:
                     query,
                     template_overview,
                 ),
-                expected_keys=["title", "hero", "toc", "tocPlan"],
+                # toc 字段已被 tocPlan 取代，这里按最新Schema挑选/校验
+                expected_keys=["title", "hero", "tocPlan", "tocTitle"],
             )
             emit('stage', {
                 'stage': 'layout_designed',
@@ -601,11 +603,16 @@ class ReportAgent:
                             stream_callback=chunk_callback
                         )
                         break
-                    except (ChapterJsonParseError, ChapterContentError) as structured_error:
-                        error_kind = (
-                            "content_sparse" if isinstance(structured_error, ChapterContentError) else "json_parse"
-                        )
-                        readable_label = "内容密度异常" if error_kind == "content_sparse" else "JSON解析失败"
+                    except (ChapterJsonParseError, ChapterContentError, ChapterValidationError) as structured_error:
+                        if isinstance(structured_error, ChapterContentError):
+                            error_kind = "content_sparse"
+                            readable_label = "内容密度异常"
+                        elif isinstance(structured_error, ChapterValidationError):
+                            error_kind = "validation"
+                            readable_label = "结构校验失败"
+                        else:
+                            error_kind = "json_parse"
+                            readable_label = "JSON解析失败"
                         if isinstance(structured_error, ChapterContentError):
                             candidate = getattr(structured_error, "chapter_payload", None)
                             candidate_score = getattr(structured_error, "body_characters", 0) or 0
@@ -636,6 +643,10 @@ class ReportAgent:
                             'error': str(structured_error),
                             'reason': error_kind,
                         }
+                        if isinstance(structured_error, ChapterValidationError):
+                            validation_errors = getattr(structured_error, "errors", None)
+                            if validation_errors:
+                                status_payload['errors'] = validation_errors
                         if will_fallback:
                             status_payload['warning'] = 'content_sparse_fallback_pending'
                         emit('chapter_status', status_payload)
@@ -650,6 +661,40 @@ class ReportAgent:
                             break
                         if attempt >= chapter_max_attempts:
                             raise
+                        attempt += 1
+                        continue
+                    except (AttributeError, TypeError, KeyError, IndexError, ValueError, json.JSONDecodeError) as structure_error:
+                        # 捕获因 JSON 结构异常导致的运行时错误，包装为可重试异常
+                        # 包括：
+                        # - AttributeError: 如 list.get() 调用失败
+                        # - TypeError: 类型不匹配
+                        # - KeyError: 字典键缺失
+                        # - IndexError: 列表索引越界
+                        # - ValueError: 值错误（如 LLM 返回空内容、缺少必要字段）
+                        # - json.JSONDecodeError: JSON 解析失败（未被内部捕获的情况）
+                        error_type = type(structure_error).__name__
+                        logger.warning(
+                            "章节 {title} 生成过程中发生 {error_type}（第 {attempt}/{total} 次尝试），将尝试重新生成: {error}",
+                            title=section.title,
+                            error_type=error_type,
+                            attempt=attempt,
+                            total=chapter_max_attempts,
+                            error=structure_error,
+                        )
+                        emit('chapter_status', {
+                            'chapterId': section.chapter_id,
+                            'title': section.title,
+                            'status': 'retrying' if attempt < chapter_max_attempts else 'error',
+                            'attempt': attempt,
+                            'error': str(structure_error),
+                            'reason': 'structure_error',
+                            'error_type': error_type
+                        })
+                        if attempt >= chapter_max_attempts:
+                            # 达到最大重试次数，包装为 ChapterJsonParseError 抛出
+                            raise ChapterJsonParseError(
+                                f"{section.title} 章节因 {error_type} 在 {chapter_max_attempts} 次尝试后仍无法生成: {structure_error}"
+                            ) from structure_error
                         attempt += 1
                         continue
                     except Exception as chapter_error:
